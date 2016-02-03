@@ -10,22 +10,22 @@ export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # Color shortcuts
-# From https://gist.github.com/joemaller/4503986
-function RED        { echo "\[\e[0;31m\]$1\[\e[0m\]"; }
-function GREEN      { echo "\[\e[0;32m\]$1\[\e[0m\]"; }
-function YELLOW     { echo "\[\e[0;33m\]$1\[\e[0m\]"; }
-function BLUE       { echo "\[\e[0;34m\]$1\[\e[0m\]"; }
-function MAGENTA    { echo "\[\e[0;35m\]$1\[\e[0m\]"; }
-function CYAN       { echo "\[\e[0;36m\]$1\[\e[0m\]"; }
-function WHITE      { echo "\[\e[0;37m\]$1\[\e[0m\]"; }
+# Based on https://gist.github.com/joemaller/4503986
+function RED        { echo "\e[0;31m$1\e[0m"; }
+function GREEN      { echo "\e[0;32m$1\e[0m"; }
+function YELLOW     { echo "\e[0;33m$1\e[0m"; }
+function BLUE       { echo "\e[0;34m$1\e[0m"; }
+function MAGENTA    { echo "\e[0;35m$1\e[0m"; }
+function CYAN       { echo "\e[0;36m$1\e[0m"; }
+function WHITE      { echo "\e[0;37m$1\e[0m"; }
 
-function B_RED      { echo "\[\e[1;31m\]$1\[\e[0m\]"; }
-function B_GREEN    { echo "\[\e[1;32m\]$1\[\e[0m\]"; }
-function B_YELLOW   { echo "\[\e[1;33m\]$1\[\e[0m\]"; }
-function B_BLUE     { echo "\[\e[1;34m\]$1\[\e[0m\]"; }
-function B_MAGENTA  { echo "\[\e[1;35m\]$1\[\e[0m\]"; }
-function B_CYAN     { echo "\[\e[1;36m\]$1\[\e[0m\]"; }
-function B_WHITE    { echo "\[\e[1;37m\]$1\[\e[0m\]"; }
+function B_RED      { echo "\e[1;31m$1\e[0m"; }
+function B_GREEN    { echo "\e[1;32m$1\e[0m"; }
+function B_YELLOW   { echo "\e[1;33m$1\e[0m"; }
+function B_BLUE     { echo "\e[1;34m$1\e[0m"; }
+function B_MAGENTA  { echo "\e[1;35m$1\e[0m"; }
+function B_CYAN     { echo "\e[1;36m$1\e[0m"; }
+function B_WHITE    { echo "\e[1;37m$1\e[0m"; }
 
 # Format for git_prompt_status()
 BASH_THEME_GIT_PROMPT_UNMERGED=" $(RED unmerged)"
