@@ -10,51 +10,46 @@ export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # Color shortcuts
-export RESET_COLOR='\e[0m' # No Color
-export BBLACK='\e[0;30m'
-export BRED='\e[1;31m'
-export BGREEN='\e[1;32m'
-export BYELLOW='\e[1;33m'
-export BBLUE='\e[1;34m'
-export BPURPLE='\e[1;35m'
-export BCYAN='\e[1;36m'
-export BWHITE='\e[0;37m'
+# Based on https://gist.github.com/joemaller/4503986
+function RED        { echo "\e[0;31m$1\e[0m"; }
+function GREEN      { echo "\e[0;32m$1\e[0m"; }
+function YELLOW     { echo "\e[0;33m$1\e[0m"; }
+function BLUE       { echo "\e[0;34m$1\e[0m"; }
+function MAGENTA    { echo "\e[0;35m$1\e[0m"; }
+function CYAN       { echo "\e[0;36m$1\e[0m"; }
+function WHITE      { echo "\e[0;37m$1\e[0m"; }
 
-export BLACK='\e[0;30m'
-export RED='\e[0;31m'
-export GREEN='\e[0;32m'
-export YELLOW='\e[0;33m'
-export BLUE='\e[0;34m'
-export PURPLE='\e[0;35m'
-export CYAN='\e[0;36m'
-export WHITE='\e[0;37m'
-
+function B_RED      { echo "\e[1;31m$1\e[0m"; }
+function B_GREEN    { echo "\e[1;32m$1\e[0m"; }
+function B_YELLOW   { echo "\e[1;33m$1\e[0m"; }
+function B_BLUE     { echo "\e[1;34m$1\e[0m"; }
+function B_MAGENTA  { echo "\e[1;35m$1\e[0m"; }
+function B_CYAN     { echo "\e[1;36m$1\e[0m"; }
+function B_WHITE    { echo "\e[1;37m$1\e[0m"; }
 
 # Format for git_prompt_status()
-BASH_THEME_GIT_PROMPT_UNMERGED=" $RED unmerged"
-BASH_THEME_GIT_PROMPT_DELETED=" $RED deleted"
-BASH_THEME_GIT_PROMPT_RENAMED=" $YELLOW renamed"
-BASH_THEME_GIT_PROMPT_MODIFIED=" $YELLOW modified"
-BASH_THEME_GIT_PROMPT_ADDED=" $GREEN added"
-BASH_THEME_GIT_PROMPT_UNTRACKED=" $WHITE untracked"
+BASH_THEME_GIT_PROMPT_UNMERGED=" $(RED unmerged)"
+BASH_THEME_GIT_PROMPT_DELETED=" $(RED deleted)"
+BASH_THEME_GIT_PROMPT_RENAMED=" $(YELLOW renamed)"
+BASH_THEME_GIT_PROMPT_MODIFIED=" $(YELLOW modified)"
+BASH_THEME_GIT_PROMPT_ADDED=" $(GREEN added)"
+BASH_THEME_GIT_PROMPT_UNTRACKED=" $(WHITE untracked)"
 
-BASH_THEME_GIT_PROMPT_PREFIX="$RESET_COLOR $CYAN"
-BASH_THEME_GIT_PROMPT_SUFFIX="$RESET_COLOR"
-BASH_THEME_GIT_PROMPT_DIRTY="$BRED (*)$RESET_COLOR"
+function BASH_THEME_GIT_PROMPT_BRANCH { echo "$(CYAN $1)"; }
+BASH_THEME_GIT_PROMPT_DIRTY=" $(B_RED \(*\))"
 BASH_THEME_GIT_PROMPT_CLEAN=""
 
 # Colors vary depending on time lapsed.
-BASH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="$GREEN"
-BASH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="$BYELLOW"
-BASH_THEME_GIT_TIME_SINCE_COMMIT_LONG="$BRED"
-BASH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="$CYAN"
+function BASH_THEME_GIT_TIME_SINCE_COMMIT_SHORT     { echo "$(GREEN $1)"; }
+function BASH_THEME_GIT_TIME_SINCE_COMMIT_MEDIUM    { echo "$(B_YELLOW $1)"; }
+function BASH_THEME_GIT_TIME_SINCE_COMMIT_LONG      { echo "$(B_RED $1)"; }
+function BASH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL   { echo "$(CYAN $1)"; }
 
 # Format for git_prompt_ahead()
-BASH_THEME_GIT_PROMPT_AHEAD=" ${BWHITE}(${BYELLOW}↑${BWHITE})"
+BASH_THEME_GIT_PROMPT_AHEAD=" $(WHITE \()$(YELLOW ↑)$(WHITE \))"
 
 # Format for git_prompt_long_sha() and git_prompt_short_sha()
-BASH_THEME_GIT_PROMPT_SHA_BEFORE="$YELLOW::$BLUE"
-BASH_THEME_GIT_PROMPT_SHA_AFTER="$WHITE"
+BASH_THEME_GIT_PROMPT_SHA_BEFORE="$(YELLOW ::)"
 
 current_branch () {
   local ref
@@ -114,34 +109,35 @@ git_time_since_commit () {
       DAYS=$((seconds_since_last_commit / 86400))
       SUB_HOURS=$((HOURS % 24))
       SUB_MINUTES=$((MINUTES % 60))
-      if [[ -n $(git status -s 2> /dev/null) ]]; then
-        if [ "$MINUTES" -gt 30 ]; then
-          COLOR="$BASH_THEME_GIT_TIME_SINCE_COMMIT_LONG"
-        elif [ "$MINUTES" -gt 10 ]; then
-          COLOR="$BASH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM"
+      function COLOR {
+        if [[ -n $(git status -s 2> /dev/null) ]]; then
+          if [ "$MINUTES" -gt 30 ]; then
+            echo "$(BASH_THEME_GIT_TIME_SINCE_COMMIT_LONG $1)"
+          elif [ "$MINUTES" -gt 10 ]; then
+            echo "$(BASH_THEME_GIT_TIME_SINCE_COMMIT_MEDIUM $1)"
+          else
+            echo "$(BASH_THEME_GIT_TIME_SINCE_COMMIT_SHORT $1)"
+          fi
         else
-          COLOR="$BASH_THEME_GIT_TIME_SINCE_COMMIT_SHORT"
+          echo "$(BASH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL $1)"
         fi
-      else
-        COLOR="$BASH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL"
-      fi
+      }
 
       if [ "$HOURS" -gt 24 ]; then
-        echo "${COLOR}${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m${RESET_COLOR}"
+        echo "$(COLOR ${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m)"
       elif [ "${MINUTES}" -gt 60 ]; then
-        echo "$COLOR${HOURS}h${SUB_MINUTES}m${RESET_COLOR}"
+        echo "$(COLOR ${HOURS}h${SUB_MINUTES}m)"
       else
-        echo "$COLOR${MINUTES}m${RESET_COLOR}"
+        echo "$(COLOR ${MINUTES}m)"
       fi
     else
-      COLOR="${BASH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL}"
-      echo "${RESET_COLOR}"
+      echo ""
     fi
   fi
 }
 
 my_git_time () {
-  echo "$RESET_COLOR (${RESET_COLOR}`git_time_since_commit`${RESET_COLOR})"
+  echo " ($(git_time_since_commit))"
 }
 
 color_prompt=yes;
@@ -150,10 +146,14 @@ force_color_prompt=yes;
 # old pos was after current_branch for... $(git_prompt_short_sha)
 # old pos was before dirty status for...$(git_prompt_status)
 git_custom_status () {
-  local cb=$(current_branch)
-  if [ -n "$cb" ]; then
-    echo -e "${RESET_COLOR} on ${BASH_THEME_GIT_PROMPT_PREFIX}`current_branch`${BASH_THEME_GIT_PROMPT_SUFFIX}`my_git_time``parse_git_dirty``git_prompt_ahead`"
-  fi
+    local cb=$(current_branch)
+    if [ -n "$cb" ]; then
+        echo " on $(BASH_THEME_GIT_PROMPT_BRANCH $(current_branch))$(my_git_time)$(parse_git_dirty)$(git_prompt_ahead)"
+    fi
 }
 
-PS1="\[$PURPLE\]\u \[$RESET_COLOR\]at \[$YELLOW\]\h \[$RESET_COLOR\]in \[$BBLUE\]\w"'`git_custom_status`'" \n\[$CYAN\]> \[$RESET_COLOR\]"
+git_prompt_command() {
+    PS1="$(MAGENTA \\u) at $(YELLOW \\h) in $(B_BLUE \\w)$(git_custom_status)\n$(CYAN \>) "
+}
+
+PROMPT_COMMAND="git_prompt_command; $PROMPT_COMMAND"
