@@ -35,7 +35,7 @@ BASH_THEME_GIT_PROMPT_MODIFIED=" $(YELLOW modified)"
 BASH_THEME_GIT_PROMPT_ADDED=" $(GREEN added)"
 BASH_THEME_GIT_PROMPT_UNTRACKED=" $(WHITE untracked)"
 
-function BASH_THEME_GIT_PROMPT_BRANCH { echo "$(CYAN $1)"; }
+function BASH_THEME_GIT_PROMPT_BRANCH { echo "$(B_BLUE $1)"; }
 BASH_THEME_GIT_PROMPT_DIRTY=" $(B_RED \(*\))"
 BASH_THEME_GIT_PROMPT_CLEAN=""
 
@@ -43,7 +43,7 @@ BASH_THEME_GIT_PROMPT_CLEAN=""
 function BASH_THEME_GIT_TIME_SINCE_COMMIT_SHORT     { echo "$(GREEN $1)"; }
 function BASH_THEME_GIT_TIME_SINCE_COMMIT_MEDIUM    { echo "$(B_YELLOW $1)"; }
 function BASH_THEME_GIT_TIME_SINCE_COMMIT_LONG      { echo "$(B_RED $1)"; }
-function BASH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL   { echo "$(CYAN $1)"; }
+function BASH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL   { echo "$(B_BLUE $1)"; }
 
 # Format for git_prompt_ahead()
 BASH_THEME_GIT_PROMPT_AHEAD=" $(WHITE \()$(YELLOW ↑)$(WHITE \))"
@@ -153,7 +153,7 @@ git_custom_status () {
 }
 
 git_prompt_command() {
-    PS1="$(MAGENTA \\u) at $(YELLOW \\h) in $(B_BLUE \\w)$(git_custom_status)\n$(CYAN \>) "
+    PS1="$(MAGENTA \\u) at $(YELLOW \\h) in $(CYAN \\w)$(git_custom_status)\n$(B_BLUE \>) "
 }
 
 PROMPT_COMMAND="git_prompt_command; $PROMPT_COMMAND"
