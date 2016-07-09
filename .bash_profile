@@ -152,7 +152,7 @@ force_color_prompt=yes;
 git_custom_status () {
   local cb=$(current_branch)
   if [ -n "$cb" ]; then
-    echo -e "${RESET_COLOR} on ${BASH_THEME_GIT_PROMPT_PREFIX}`current_branch`${BASH_THEME_GIT_PROMPT_SUFFIX}`my_git_time``parse_git_dirty``git_prompt_ahead`"
+    echo -e "${RESET_COLOR} on${BASH_THEME_GIT_PROMPT_PREFIX}`current_branch`${BASH_THEME_GIT_PROMPT_SUFFIX}`my_git_time``parse_git_dirty``git_prompt_ahead`"
   fi
 }
 
